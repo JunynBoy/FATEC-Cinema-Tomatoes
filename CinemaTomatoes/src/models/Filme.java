@@ -10,7 +10,7 @@ package models;
  */
 public class Filme {
     
-    private Long id;
+    private int id;
     
     private String titulo;
     
@@ -19,12 +19,22 @@ public class Filme {
     private String ano;
     
     private String pais;
+    
+    private String diretor;
 
-    public Long getId() {
+    public String getDiretor() {
+        return diretor;
+    }
+
+    public void setDiretor(String diretor) {
+        this.diretor = diretor;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

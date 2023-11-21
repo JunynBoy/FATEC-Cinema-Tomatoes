@@ -10,7 +10,7 @@ package models;
  */
 public class Usuario {
     
-    private Long id;
+    private int id;
     
     private String nome;
     
@@ -18,11 +18,11 @@ public class Usuario {
     
     private String senha;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
