@@ -12,8 +12,8 @@ public class FilmeService {
         return dao.getById(id);
     }
     
-    public Filme getbyName(int id){
-        return dao.getById(id);
+    public LinkedList getAllByTitulo(String titulo){
+        return dao.getByTitulo(titulo);
     }
     
     

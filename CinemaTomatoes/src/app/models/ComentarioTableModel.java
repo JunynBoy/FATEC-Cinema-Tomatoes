@@ -16,7 +16,7 @@ import javax.swing.table.TableCellRenderer;
 
 public class ComentarioTableModel extends AbstractTableModel  {
     private LinkedList<Comentario> dados = new LinkedList<>();
-    private String[] colunas = {"id","Usuarios", "Comentarios", "Notas" };
+    private String[] colunas = {"id","Comentarios","Notas" , "Usuarios"};
   
     @Override
     public String getColumnName(int coluna) {

@@ -16,13 +16,14 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.LinkedList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author JuninBoy
  */
-public class FilmeFrame extends javax.swing.JFrame {
+public class FilmeFrame extends JFrame {
 
     private boolean editar = false;
     private Usuario usuarioLogado = new Usuario();
@@ -33,25 +34,30 @@ public class FilmeFrame extends javax.swing.JFrame {
     private LinkedList<Comentario> comentarios = new LinkedList<>();
     private ComentarioTableModel comentarioTableModel = new ComentarioTableModel();
     private Filme filmeSelecionado;
+    private final Principal principal;
     
-    public FilmeFrame(java.awt.Frame parent, boolean editar, Usuario usuarioLogado) {
+    public FilmeFrame(Principal parent, boolean editar, Usuario usuarioLogado) {
         initComponents();
         this.centralizarComponente();
         this.editar = editar;
+        principal = parent;
         this.usuarioLogado = usuarioLogado;
         this.jtComentarios.setVisible(false);
         this.loadComboBox();
     }
     
-    public FilmeFrame(java.awt.Frame parent, boolean editar, Filme filme, Usuario usuarioLogado) {
+    public FilmeFrame(Principal parent, boolean editar, Filme filme, Usuario usuarioLogado) {
         initComponents();
         this.centralizarComponente();
         this.filmeSelecionado = filme;
         this.editar = editar;
+        principal = parent;
         this.loadComboBox();
         this.loadTable();
         this.usuarioLogado = usuarioLogado;
         this.carregarCampos(filmeSelecionado);
+        this.loadTable();
+        this.loadValuesInTableComentarios();
         
         
     }
@@ -65,13 +71,14 @@ public class FilmeFrame extends javax.swing.JFrame {
     
     public void loadValuesInTableComentarios(){
         
-        this.comentarios = this.comentarioService.getAll();
-        
+        this.comentarios = this.comentarioService.getAllById(this.filmeSelecionado.getId());
+        this.comentarioTableModel.removeAllRows();
+        this.comentarioTableModel.addRows(this.comentarios);
         
     }
     
     
-    private Comentario obterComentarioSelecionado(){
+     private Comentario obterComentarioSelecionado(){
         
         int linhaSelecionada = jtComentarios.getSelectedRow();
 
@@ -109,6 +116,8 @@ public class FilmeFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtComentarios = new javax.swing.JTable();
         btnComentario = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnEditarComentario = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -182,6 +191,15 @@ public class FilmeFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Avaliações dos internautas:");
+
+        btnEditarComentario.setText("E");
+        btnEditarComentario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarComentarioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,9 +236,13 @@ public class FilmeFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnAdicionarGenero)
                         .addGap(53, 53, 53)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnComentario)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnComentario)
+                            .addComponent(btnEditarComentario))
                         .addContainerGap(21, Short.MAX_VALUE))))
             .addComponent(lblHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -228,7 +250,9 @@ public class FilmeFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(lblHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -254,8 +278,11 @@ public class FilmeFrame extends javax.swing.JFrame {
                                 .addComponent(lblAno, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(3, 3, 3))))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnComentario))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnComentario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditarComentario)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnCancelar))
@@ -286,6 +313,7 @@ public class FilmeFrame extends javax.swing.JFrame {
         try{
             filmeService.save(filme);
             JOptionPane.showMessageDialog(this, "Filme salvo com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            this.principal.atualizarFilmes();
             this.dispose();
         }catch(Exception e){
             JOptionPane.showMessageDialog(this, "Não foi possível salvar o filme", "Erro de persistencia", JOptionPane.ERROR_MESSAGE);
@@ -333,7 +361,7 @@ public class FilmeFrame extends javax.swing.JFrame {
 
     private void btnComentarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComentarioActionPerformed
         // TODO add your handling code here:
-        ComentarioDialog comentarioDialog = new ComentarioDialog(this, true, filmeSelecionado, this.usuarioLogado );
+        ComentarioDialog comentarioDialog = new ComentarioDialog(this, true, false,filmeSelecionado, this.usuarioLogado );
         comentarioDialog.setVisible(true);
         
         
@@ -343,10 +371,41 @@ public class FilmeFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbGeneroActionPerformed
 
+    private void btnEditarComentarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarComentarioActionPerformed
+        Comentario comentarioSelecionado = this.obterComentarioSelecionado();
+        if(comentarioSelecionado == null){
+            JOptionPane.showMessageDialog(this, "Nenhum comentário foi selecionado", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }else if(!comentarioSelecionado.getUsuario().equals(usuarioLogado.getNome())){
+            JOptionPane.showMessageDialog(this, "Esse comentário nao é seu!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }else{
+            ComentarioDialog comentarioDialog = new ComentarioDialog(this, true,true, filmeSelecionado, comentarioSelecionado,this.usuarioLogado );
+            comentarioDialog.setVisible(true);
+        }
+        
+        
+    }//GEN-LAST:event_btnEditarComentarioActionPerformed
+
     
     public void loadComboBox(){
-        comboGenero = generoService.getAll();
-        cbGenero.setModel(new DefaultComboBoxModel(comboGenero.toArray()));
+        if(editar){
+            comboGenero = generoService.getAll();
+            String generoString = filmeSelecionado.getGenero().getDescricao();
+
+            // Iterate through the comboGenero list to find the index of generoString
+            int generoIndex = 0;
+            for (Genero genero : comboGenero) {
+                if (genero.getDescricao().equals(generoString)) {
+                    break;
+                }
+                generoIndex++;
+            }
+
+            cbGenero.setModel(new DefaultComboBoxModel(comboGenero.toArray()));
+            this.cbGenero.setSelectedIndex(generoIndex);
+        }else{
+            comboGenero = generoService.getAll();
+            cbGenero.setModel(new DefaultComboBoxModel(comboGenero.toArray()));
+        }
     }
     
     public void centralizarComponente() { 
@@ -370,7 +429,6 @@ public class FilmeFrame extends javax.swing.JFrame {
             generoIndex++;
         }
 
-        // Set the selected item in the combo box based on the index
         this.cbGenero.setSelectedIndex(generoIndex);
         
         
@@ -398,8 +456,10 @@ public class FilmeFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnAdicionarGenero;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnComentario;
+    private javax.swing.JButton btnEditarComentario;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<Genero> cbGenero;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtComentarios;
     private javax.swing.JLabel lblAno;

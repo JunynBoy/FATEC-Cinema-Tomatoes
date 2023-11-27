@@ -20,7 +20,7 @@ public class ComentarioDAO implements GenericDAO<Comentario>{
     
 
     @Override
-    public Comentario getById(int idGenero){
+    public Comentario getById(int idFilme){
         PreparedStatement ps;
         ResultSet rs;
         
@@ -28,7 +28,7 @@ public class ComentarioDAO implements GenericDAO<Comentario>{
             
             ps = conexao.getConexao().prepareStatement("select * from comentario "
                     + " where id = ? ");
-            ps.setInt(1, idGenero);
+            ps.setInt(1, idFilme);
             
             rs = ps.executeQuery();
             if(rs.next()){
@@ -40,6 +40,29 @@ public class ComentarioDAO implements GenericDAO<Comentario>{
         }
         
         return null;
+    }
+    
+    public LinkedList getAllById(int idFilme){
+        PreparedStatement ps;
+        ResultSet rs;
+        LinkedList lista = new LinkedList();
+         
+        try{
+            
+            ps = conexao.getConexao().prepareStatement("select * from comentario "
+                    + " where filme_id = ? ");
+            ps.setInt(1, idFilme);
+            
+            rs = ps.executeQuery();
+             while (rs.next()) {
+                lista.add(this.setComentario(rs));
+            }
+            
+        }catch(SQLException ex){
+             Logger.getLogger(ComentarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return lista;
     }
     
 
@@ -93,15 +116,15 @@ public class ComentarioDAO implements GenericDAO<Comentario>{
     @Override
     public Comentario update(Comentario comentario){
         PreparedStatement st;
-        int i = 1; 
+        
         try {
             st = conexao.getConexao().prepareStatement("UPDATE comentario SET "
                     + "comentario = ?, nota = ?, usuario = ? WHERE id = ?");
-            st.setString(i++, comentario.getComentario());
-            st.setDouble(i++, comentario.getNota());
-            st.setString(i++, comentario.getUsuario());
+            st.setString(1, comentario.getComentario());
+            st.setDouble(2, comentario.getNota());
+            st.setString(3, comentario.getUsuario());
             
-            st.setInt(++i, comentario.getId());
+            st.setInt(4, comentario.getId());
 
             st.execute();
 

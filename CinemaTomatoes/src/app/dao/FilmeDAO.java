@@ -45,6 +45,28 @@ public class FilmeDAO implements GenericDAO<Filme>{
         return null;
     }
     
+    public LinkedList getByTitulo(String titulo){
+        PreparedStatement ps;
+        ResultSet rs;
+        LinkedList lista = new LinkedList();
+        try{
+            
+            ps = conexao.getConexao().prepareStatement("select * from filme "
+                    + "order by titulo like ? desc");
+            ps.setString(1, "%" + titulo + "%");
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                lista.add(this.setFilme(rs));
+            }
+            
+        }catch(SQLException ex){
+             Logger.getLogger(FilmeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return lista;
+    }
+    
 
     
     @Override

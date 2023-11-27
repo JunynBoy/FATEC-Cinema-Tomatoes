@@ -16,12 +16,16 @@ public class ComentarioService {
         return dao.getAll();
     }
     
+    public LinkedList getAllById(int id){
+        return dao.getAllById(id);
+    }
+    
     public Comentario save(Comentario comentario){
         return dao.save(comentario);
     }
     
     public Comentario update(Comentario comentario){
-        return dao.save(comentario);
+        return dao.update(comentario);
     }
     
     public void delete(int id){

@@ -40,6 +40,8 @@ public class Principal extends javax.swing.JFrame {
         this.miLogOut.setVisible(logado);
         this.jifListarFilme.setVisible(false);
         this.loadTable();
+        this.jmFilme.setVisible(false);
+        this.atualizarFilmes();
     }
 
     
@@ -230,7 +232,7 @@ public class Principal extends javax.swing.JFrame {
         
         LoginDialog loginDialog = new LoginDialog( this ,true, true,
                 this.logado ,this.usuario);
-                loginDialog.setVisible(rootPaneCheckingEnabled);
+        loginDialog.setVisible(rootPaneCheckingEnabled);
         this.usuario = loginDialog.getUsuario();
         if(usuario != null && usuario.getId() != 0){
             this.logado = true;
@@ -260,6 +262,8 @@ public class Principal extends javax.swing.JFrame {
        
         this.usuario = null;
         this.logado = false;
+        this.jmFilme.setVisible(logado);
+        this.jifListarFilme.setVisible(false);
         JOptionPane.showMessageDialog(this, "LogOut Finalizado", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         this.validarEstadoUsuario();
         
@@ -276,7 +280,7 @@ public class Principal extends javax.swing.JFrame {
         
        String titulo = this.txtNomeFilter.getText() != null ? this.txtNomeFilter.getText() : null;
 
-       this.filmes = this.filmeService.getAll();
+       this.filmes = this.filmeService.getAllByTitulo(titulo);
 
        this.filmeTableModel.removeAllRows();
        this.filmeTableModel.addRows(this.filmes);
@@ -341,13 +345,10 @@ public class Principal extends javax.swing.JFrame {
         });
     }
     
-    
     private void loadServices() {
         this.generos = this.generoService.getAll();
         this.filmes = this.filmeService.getAll();
     }
-    
-    
     
     public void loadTable(){
         jTFilme.setModel(filmeTableModel);
@@ -375,6 +376,19 @@ public class Principal extends javax.swing.JFrame {
             this.jmFilme.setVisible(true);
         }
     }
+    
+    
+    public void atualizarFilmes() {                                          
+        
+       this.txtNomeFilter.setText("");
+       this.filmes = this.filmeService.getAll();
+       this.filmeTableModel.removeAllRows();
+       this.filmeTableModel.addRows(this.filmes);
+        
+    } 
+    
+    
+    
     
     private Filme obterFilmeSelecionado(){
         

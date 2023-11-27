@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package janelas;
 
 import app.models.Comentario;
@@ -17,17 +13,33 @@ import javax.swing.JOptionPane;
 public class ComentarioDialog extends JDialog {
     
     private ComentarioService comentarioService = new ComentarioService();
+    private boolean editar;
     private Filme filmeSelecionado = new Filme();
     private final FilmeFrame filmeFrame;
     private Usuario usuarioLogado = new Usuario();
+    private Comentario comentarioSelecionado = new Comentario();
     
-    public ComentarioDialog(FilmeFrame parent, boolean modal,Filme filme, Usuario usuario) {
+    
+    public ComentarioDialog(FilmeFrame parent, boolean modal,boolean editar,Filme filme, Usuario usuario) {
         super(parent, modal);
         initComponents();
         this.filmeFrame = parent;
         this.filmeSelecionado = filme;
         this.usuarioLogado = usuario;
-        this.lblHeader.setText("Avaliar o filme: " + filmeSelecionado.getTitulo());
+        this.editar = editar;
+        this.validarEstado();
+        this.centralizarComponente();
+    }
+    
+    public ComentarioDialog(FilmeFrame parent, boolean modal,boolean editar,Filme filme,Comentario comentario, Usuario usuario) {
+        super(parent, modal);
+        initComponents();
+        this.filmeFrame = parent;
+        this.filmeSelecionado = filme;
+        this.usuarioLogado = usuario;
+        this.editar = editar;
+        this.comentarioSelecionado = comentario;
+        this.validarEstado();
         this.centralizarComponente();
     }
 
@@ -125,31 +137,61 @@ public class ComentarioDialog extends JDialog {
     }//GEN-LAST:event_txtNotaActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try{
-            Comentario comentario = new Comentario();
-            comentario.setFilme(filmeSelecionado);
-            comentario.setComentario(this.txtComentario.getText());
-            comentario.setNota(Double.valueOf(this.txtNota.getText()));
-            comentario.setUsuario(usuarioLogado.getNome());
-            comentarioService.save(comentario);
-            JOptionPane.showMessageDialog(this, "Comentário inserido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
-            //filmeFrame.loadComboBox();
-            //filmeFrame.loadComentarios();
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this, "Não foi cadastrar a sua avaliação", "Erro de persistencia", JOptionPane.ERROR_MESSAGE);
+       
+        if(editar == false){
+            //CÓDIGO PARA SALVAR UMA NOVA ENTIDADE
+            try{
+                Comentario comentario = new Comentario();
+                comentario.setFilme(filmeSelecionado);
+                comentario.setComentario(this.txtComentario.getText());
+                comentario.setNota(Double.valueOf(this.txtNota.getText()));
+                comentario.setUsuario(usuarioLogado.getNome());
+                comentarioService.save(comentario);
+                JOptionPane.showMessageDialog(this, "Comentário inserido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                filmeFrame.loadComboBox();
+                filmeFrame.loadValuesInTableComentarios();
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Não foi cadastrar a sua avaliação", "Erro de persistencia", JOptionPane.ERROR_MESSAGE);
+            }    
+        }else{
+            //CÓDIGO PARA EDITAR
+           try{
+                Comentario comentario = new Comentario();
+                comentario.setFilme(filmeSelecionado);
+                comentario.setComentario(this.txtComentario.getText());
+                comentario.setNota(Double.valueOf(this.txtNota.getText()));
+                comentario.setUsuario(usuarioLogado.getNome());
+                comentarioService.update(comentario);
+                JOptionPane.showMessageDialog(this, "Comentário editado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                filmeFrame.loadValuesInTableComentarios();
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Não foi atualizar a sua avaliação", "Erro de persistencia", JOptionPane.ERROR_MESSAGE);
+            } 
         }
+        
         
         
         
         
     }//GEN-LAST:event_btnSalvarActionPerformed
     
-    
-    
     public void centralizarComponente() { 
         Dimension ds = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension dw = getSize(); setLocation((ds.width - dw.width) / 2, (ds.height - dw.height) / 2);
+    }
+    
+    public void validarEstado(){
+        if(this.editar){
+            this.lblHeader.setText("Edite a avaliação de: "+ filmeSelecionado.getTitulo());
+            this.txtNota.setText(comentarioSelecionado.getNota().toString());
+            this.txtComentario.setText(comentarioSelecionado.getComentario());
+            this.btnSalvar.setText("Atualizar");
+        }else{
+            this.lblHeader.setText("Avalie o filme : " + filmeSelecionado.getTitulo());
+            this.btnSalvar.setText("Salvar");
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

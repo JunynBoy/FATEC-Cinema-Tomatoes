@@ -16,7 +16,7 @@ import javax.swing.table.TableCellRenderer;
 
 public class FilmeTableModel extends AbstractTableModel  {
     private LinkedList<Filme> dados = new LinkedList<>();
-    private String[] colunas = {"Id", "Titulo", "Genero", "Ano", "Ação"};
+    private String[] colunas = {"Id", "Titulo", "Genero", "Ano"};
   
     @Override
     public String getColumnName(int coluna) {
@@ -44,19 +44,14 @@ public class FilmeTableModel extends AbstractTableModel  {
                 return this.dados.get(linha).getGenero().getDescricao();
             case 3:
                 return this.dados.get(linha).getAno();
-            case 4:
-                return new BotoesAcao();
+            
         }
 
         return null;
     }
     
     
-    private class BotoesAcao extends JButton {
-        public BotoesAcao() {
-            this.add(new JButton("Editar"));
-        }
-    }
+
 
     @Override
     public boolean isCellEditable(int row, int col) {
