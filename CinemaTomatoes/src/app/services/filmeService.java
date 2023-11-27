@@ -26,7 +26,7 @@ public class FilmeService {
     }
     
     public Filme update(Filme filme){
-        return dao.save(filme);
+        return dao.update(filme);
     }
     
     public void delete(int id){

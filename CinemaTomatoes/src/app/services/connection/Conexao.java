@@ -29,7 +29,7 @@ public class Conexao {
         
         //estabelecer uma conexão com o banco de dados
         try{
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "root");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/cinema_tomatoes", "root", "root");
         }catch(SQLException ex){
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
         }

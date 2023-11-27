@@ -4,9 +4,7 @@
  */
 package janelas;
 
-import app.models.Filme;
 import app.models.Genero;
-import app.services.FilmeService;
 import app.services.GeneroService;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -20,11 +18,13 @@ public class GeneroDialog extends javax.swing.JDialog {
 
    
     private GeneroService generoService = new GeneroService();
+    private final FilmeFrame filmeFrame;
     
     
-    public GeneroDialog(java.awt.Frame parent, boolean modal) {
+    public GeneroDialog(FilmeFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        filmeFrame = parent;
         this.centralizarComponente();
         
     }
@@ -102,12 +102,12 @@ public class GeneroDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
         Genero genero = new Genero();
         genero.setDescricao(this.txtDescricao.getText());
         try{
             generoService.save(genero);
             JOptionPane.showMessageDialog(this, "genero salvo com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            this.filmeFrame.loadComboBox();
             this.dispose();
         }catch(Exception e){
             JOptionPane.showMessageDialog(this, "Não foi possível salvar o genero", "Erro de persistencia", JOptionPane.ERROR_MESSAGE);
@@ -124,45 +124,7 @@ public class GeneroDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
    
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GeneroDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GeneroDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GeneroDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GeneroDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                GeneroDialog dialog = new GeneroDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    
     
     
     

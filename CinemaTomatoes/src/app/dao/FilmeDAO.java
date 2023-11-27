@@ -104,19 +104,20 @@ public class FilmeDAO implements GenericDAO<Filme>{
     public Filme update(Filme filme){
         PreparedStatement st;
         ResultSet rs;
-        int i = 1; 
+        int i = 0; 
         try {
             st = conexao.getConexao().prepareStatement("UPDATE filme SET "
-                    + "titulo = ?, ano = ?, diretor = ?, pais = ? "
-                    + "WHERE id = ?");
+                    + "titulo = ?, ano = ?, diretor = ?, pais = ?, genero_id = ? "
+                    + "WHERE id = ? ");
             st.setString(++i, filme.getTitulo());
             st.setString(++i, filme.getAno());  // Use setInt se o ano for um valor numérico
             st.setString(++i, filme.getDiretor());
             st.setString(++i, filme.getPais());
+            st.setInt(++i, filme.getGenero().getId());
             st.setInt(++i, filme.getId());
 
             st.execute();
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(FilmeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

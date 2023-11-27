@@ -13,6 +13,8 @@ import app.services.GeneroService;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,6 +29,7 @@ public class Principal extends javax.swing.JFrame {
     public GeneroService generoService = new GeneroService();
     public FilmeTableModel filmeTableModel = new FilmeTableModel();
     public LinkedList<Filme> filmes = new LinkedList();
+    public Filme filmeSelecionado = new Filme();
     public LinkedList<Genero> generos = new LinkedList();
     
     
@@ -52,6 +55,7 @@ public class Principal extends javax.swing.JFrame {
         javax.swing.JButton btnBuscar = new javax.swing.JButton();
         btnAdicionar = new javax.swing.JButton();
         lblHeader = new javax.swing.JLabel();
+        btnEditar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmUsuario = new javax.swing.JMenu();
         miLogin = new javax.swing.JMenuItem();
@@ -111,6 +115,13 @@ public class Principal extends javax.swing.JFrame {
         lblHeader.setText("Lista de filmes Cinema Tomatoes");
         lblHeader.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jifListarFilmeLayout = new javax.swing.GroupLayout(jifListarFilme.getContentPane());
         jifListarFilme.getContentPane().setLayout(jifListarFilmeLayout);
         jifListarFilmeLayout.setHorizontalGroup(
@@ -120,7 +131,9 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jifListarFilmeLayout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 739, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAdicionar))
+                        .addGroup(jifListarFilmeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jifListarFilmeLayout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addComponent(jLabel1)
@@ -145,7 +158,10 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jifListarFilmeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdicionar))
+                    .addGroup(jifListarFilmeLayout.createSequentialGroup()
+                        .addComponent(btnAdicionar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditar)))
                 .addContainerGap())
         );
 
@@ -269,7 +285,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         // TODO add your handling code here:
-        FilmeFrame filmeDialog = new FilmeFrame(this,false);
+        FilmeFrame filmeDialog = new FilmeFrame(this,false, this.usuario);
         filmeDialog.setVisible(true);
         
     }//GEN-LAST:event_btnAdicionarActionPerformed
@@ -278,6 +294,25 @@ public class Principal extends javax.swing.JFrame {
         //FAZER O METODO DE INICIAR TABELA
         
     }//GEN-LAST:event_jifListarFilmeComponentShown
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        
+       
+        try {
+            filmeSelecionado = this.obterFilmeSelecionado();
+            if(filmeSelecionado == null){
+                throw new Exception("Erro, objeto nao selecionado");
+            }else{
+                FilmeFrame filmeDialog = new FilmeFrame(this,true, filmeSelecionado, this.usuario);
+                filmeDialog.setVisible(true);
+            }
+                
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Selecione um valor e tente novamente ", "Nenhum filme selecionado", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     public static void main(String args[]) {
        
@@ -312,6 +347,8 @@ public class Principal extends javax.swing.JFrame {
         this.filmes = this.filmeService.getAll();
     }
     
+    
+    
     public void loadTable(){
         jTFilme.setModel(filmeTableModel);
         jTFilme.getColumnModel().getColumn(0).setMinWidth(0);
@@ -338,9 +375,26 @@ public class Principal extends javax.swing.JFrame {
             this.jmFilme.setVisible(true);
         }
     }
+    
+    private Filme obterFilmeSelecionado(){
+        
+        int linhaSelecionada = jTFilme.getSelectedRow();
+
+        if (linhaSelecionada != -1) {
+            int valorCelula = (int) jTFilme.getValueAt(linhaSelecionada, 0);
+            
+            if (valorCelula > 0) {
+                return filmeService.getbyId(valorCelula);
+            }
+
+        }
+        return null;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;

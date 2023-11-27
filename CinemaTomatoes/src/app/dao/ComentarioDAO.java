@@ -69,22 +69,18 @@ public class ComentarioDAO implements GenericDAO<Comentario>{
     public Comentario save(Comentario comentario){
         PreparedStatement st;
         ResultSet rs = null;
-        int i = 1 ; 
         try{
-            st = conexao.getConexao().prepareStatement("insert into comentario (comentario, nota, usuario) "
-                    + "values (? , ? , ?)", 
+            st = conexao.getConexao().prepareStatement("insert into comentario (comentario, nota, usuario , filme_id) "
+                    + "values (? , ? , ?, ?)", 
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            st.setString(i++, comentario.getComentario());
-            st.setDouble(++i, comentario.getNota());
-            st.setString(++i, comentario.getUsuario());
+            st.setString(1, comentario.getComentario());
+            st.setDouble(2, comentario.getNota());
+            st.setString(3, comentario.getUsuario());
+            st.setInt(4, comentario.getFilme().getId());
             
             st.execute();
             st.getGeneratedKeys();
             
-            //realmente necessário?
-            if(rs.next()){
-                comentario.setId(rs.getInt(1));
-            }
             
         }catch(SQLException ex){
              Logger.getLogger(ComentarioDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -101,9 +97,9 @@ public class ComentarioDAO implements GenericDAO<Comentario>{
         try {
             st = conexao.getConexao().prepareStatement("UPDATE comentario SET "
                     + "comentario = ?, nota = ?, usuario = ? WHERE id = ?");
-            st.setString(++i, comentario.getComentario());
-            st.setDouble(++i, comentario.getNota());
-            st.setString(++i, comentario.getUsuario());
+            st.setString(i++, comentario.getComentario());
+            st.setDouble(i++, comentario.getNota());
+            st.setString(i++, comentario.getUsuario());
             
             st.setInt(++i, comentario.getId());
 
