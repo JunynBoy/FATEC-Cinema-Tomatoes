@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/acer/Documents/NetBeansProjects/CinemaTomatoes/src/janelas/Principal.java</file>
-            <file>file:/C:/Users/acer/Documents/NetBeansProjects/CinemaTomatoes/src/janelas/LoginDialog.java</file>
+            <file>file:/G:/Estudos/Projetos/Github/Worskpace%20Netbeans/FATEC-Cinema-Tomatoes/CinemaTomatoes/src/app/dao/inteface/GenericDAO.java</file>
+            <file>file:/G:/Estudos/Projetos/Github/Worskpace%20Netbeans/FATEC-Cinema-Tomatoes/CinemaTomatoes/src/janelas/Principal.java</file>
+            <file>file:/G:/Estudos/Projetos/Github/Worskpace%20Netbeans/FATEC-Cinema-Tomatoes/CinemaTomatoes/src/app/models/FilmeTableModel.java</file>
+            <file>file:/G:/Estudos/Projetos/Github/Worskpace%20Netbeans/FATEC-Cinema-Tomatoes/CinemaTomatoes/src/app/services/FilmeService.java</file>
+            <file>file:/G:/Estudos/Projetos/Github/Worskpace%20Netbeans/FATEC-Cinema-Tomatoes/CinemaTomatoes/src/app/dao/FilmeDAO.java</file>
         </group>
     </open-files>
 </project-private>

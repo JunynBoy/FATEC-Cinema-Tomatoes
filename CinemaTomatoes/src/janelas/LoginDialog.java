@@ -4,28 +4,49 @@
  */
 package janelas;
 
+import app.models.Usuario;
+import app.services.UsuarioService;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author acer
  */
-public class LoginDialog extends javax.swing.JDialog {
+public class LoginDialog extends JDialog {
 
-    private boolean login;
+    private boolean LoginOrCadastro;
+    private boolean logado = false;
+    private UsuarioService usuarioService = new UsuarioService();
+    private Usuario usuario;
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
     
-    public LoginDialog(java.awt.Frame parent, boolean modal, boolean login) {
+    public LoginDialog(java.awt.Frame parent, boolean modal, boolean loginOrCadastro, boolean logado, Usuario usuario) {
         super(parent, modal);
         initComponents();
-        this.login = login;
+        this.LoginOrCadastro = loginOrCadastro;
+        this.logado = logado;
+        this.usuario = usuario;
         this.validateAction();
+        Dimension ds = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dw = getSize(); setLocation((ds.width - dw.width) / 2, (ds.height - dw.height) / 2);
+        
         
     }
     
     
     public void validateAction(){
-        if(this.login){
+        if(this.LoginOrCadastro){
             this.lblTitulo.setText("Faça seu login:");
             this.lblNome.setVisible(false);
             this.txtNome.setVisible(false);
+            this.txtNome.setText("");
+            
         }else{
             this.lblTitulo.setText("Faça seu cadastro:");
             this.lblNome.setVisible(true);
@@ -48,16 +69,14 @@ public class LoginDialog extends javax.swing.JDialog {
         lblNome = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblSenha = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtLogin = new javax.swing.JTextPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtSenha = new javax.swing.JTextPane();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtNome = new javax.swing.JTextPane();
         BtnCadastrar = new javax.swing.JButton();
         btnOk = new javax.swing.JButton();
+        txtNome = new javax.swing.JTextField();
+        txtLogin = new javax.swing.JTextField();
+        txtSenha = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         lblTitulo.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblTitulo.setText("Login:");
@@ -70,12 +89,6 @@ public class LoginDialog extends javax.swing.JDialog {
 
         lblSenha.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSenha.setText("Senha:");
-
-        jScrollPane1.setViewportView(txtLogin);
-
-        jScrollPane2.setViewportView(txtSenha);
-
-        jScrollPane3.setViewportView(txtNome);
 
         BtnCadastrar.setText("Cadastrar");
         BtnCadastrar.addActionListener(new java.awt.event.ActionListener() {
@@ -99,21 +112,21 @@ public class LoginDialog extends javax.swing.JDialog {
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(BtnCadastrar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(207, 207, 207)
                             .addComponent(btnOk))
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -121,19 +134,19 @@ public class LoginDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(75, 75, 75)
                 .addComponent(lblTitulo)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNome))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSenha))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNome)
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSenha)
+                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnCadastrar)
                     .addComponent(btnOk))
@@ -145,17 +158,52 @@ public class LoginDialog extends javax.swing.JDialog {
 
     private void BtnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCadastrarActionPerformed
         //faça seu cadastro:
-        this.login = false;
+        this.LoginOrCadastro = false;
+        
+        
         this.validateAction();
   
     }//GEN-LAST:event_BtnCadastrarActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        // TODO add your handling code here:
-        if(this.login == false){
-            this.login = true;
-            this.validateAction();
+        //CÓDIGO PARA LOGIN
+        if(this.LoginOrCadastro == true){
+            
+            try{
+               usuario = this.usuarioService.getbyLogin(this.txtLogin.getText());
+                if(usuario.getSenha() != this.txtSenha.getText()){
+                    this.logado = true;
+                    JOptionPane.showMessageDialog(this, "Logado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                }else{
+                    JOptionPane.showMessageDialog(this, "Senha inválida. Por favor, tente novamente.", "Erro de Autenticação", JOptionPane.ERROR_MESSAGE);
+                } 
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Login ou senha inválida. Por favor, tente novamente.", "Erro de Autenticação", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        
+
+        //CÓDIGO PARA CADASTRO
+        }else{
+            usuario = new Usuario();
+            usuario.setNome(this.txtNome.getText()); 
+            usuario.setLogin(this.txtLogin.getText()); 
+            usuario.setSenha(this.txtSenha.getText()); 
+            
+            try{
+                this.usuarioService.save(usuario);
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Erro ao salvar usuário: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            
+            JOptionPane.showMessageDialog(this, "Usuário salvo com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
         }
+        
+        
+        
         
     }//GEN-LAST:event_btnOkActionPerformed
 
@@ -164,14 +212,11 @@ public class LoginDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnOk;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSenha;
     private javax.swing.JLabel lblTitulo;
-    private javax.swing.JTextPane txtLogin;
-    private javax.swing.JTextPane txtNome;
-    private javax.swing.JTextPane txtSenha;
+    private javax.swing.JTextField txtLogin;
+    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtSenha;
     // End of variables declaration//GEN-END:variables
 }
